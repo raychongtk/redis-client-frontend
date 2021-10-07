@@ -7,6 +7,8 @@ class RedisClientState extends Equatable {
 
 class Uninitialized extends RedisClientState {}
 
+class RedisConnected extends RedisClientState {}
+
 class RedisKeysFetched extends RedisClientState {
   final List<String> keys;
 

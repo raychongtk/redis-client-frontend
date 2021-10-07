@@ -12,6 +12,7 @@ class HttpClient {
       {Map<String, String>? headers, Map<String, String>? body}) async {
     http.Response response = await http.post(Uri.parse(url),
         headers: headers, body: jsonEncode(body));
+    print(response.body);
     return response;
   }
 
