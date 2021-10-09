@@ -28,7 +28,7 @@ class RedisApiProvider {
   }
 
   Future<ApiResponse> getKeys() {
-    final String url = "$baseAPI/ajax/redis/keys";
+    final String url = "$baseAPI/ajax/redis?pattern=*";
 
     return httpClient.get(url).then((resp) => ApiResponse(
         successResult: GetRedisKeysResponse.fromJson(json.decode(resp.body))));

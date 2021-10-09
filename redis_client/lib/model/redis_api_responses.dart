@@ -9,7 +9,7 @@ class GetRedisKeysResponse extends Equatable {
   List<Object> get props => [this.keys];
 
   GetRedisKeysResponse.fromJson(Map<String, dynamic> json)
-      : this.keys = ((json['keys'] as List<String>)).map((q) => q).toList();
+      : this.keys = (json['keys'] as List).map((q) => q as String).toList();
 }
 
 class ConnectRedisResponse extends Equatable {
