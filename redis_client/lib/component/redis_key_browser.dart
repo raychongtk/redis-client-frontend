@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redis_client/bloc/redis_client_bloc.dart';
@@ -13,6 +15,7 @@ class RedisKeyBrowser extends StatefulWidget {
 }
 
 class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
+  Timer? inputTimer;
   List<String> keys = [];
   int selectedIndex = -1;
 
@@ -61,14 +64,20 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
             children: [
               Container(
                 child: TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  ),
-                  cursorColor: Colors.black,
-                ),
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                    ),
+                    cursorColor: Colors.black,
+                    onChanged: (pattern) {
+                      inputTimer?.cancel();
+                      inputTimer = Timer(Duration(milliseconds: 500), () {
+                        BlocProvider.of<RedisClientBloc>(context)
+                            .add(FetchRedisKeys(pattern: pattern));
+                      });
+                    }),
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -94,7 +103,7 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
                         child: ListTile(
                           title: Text(keys[index]),
                           hoverColor:
-                              Theme.of(context).colorScheme.primaryVariant,
+                          Theme.of(context).colorScheme.primaryVariant,
                           onTap: () {
                             BlocProvider.of<RedisClientBloc>(context)
                                 .add(GetRedisKeyType(keys[index]));
