@@ -41,3 +41,13 @@ class GetRedisString extends RedisClientEvent {
   @override
   List<Object> get props => [this.key];
 }
+
+class UpdateRedisString extends RedisClientEvent {
+  final String key;
+  final String value;
+
+  UpdateRedisString(this.key, this.value);
+
+  @override
+  List<Object> get props => [this.key, this.value];
+}

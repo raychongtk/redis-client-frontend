@@ -30,10 +30,11 @@ class RedisKeyTypeFetched extends RedisClientState {
 }
 
 class RedisStringFetched extends RedisClientState {
+  final String key;
   final String value;
 
-  RedisStringFetched(this.value);
+  RedisStringFetched(this.key, this.value);
 
   @override
-  List<Object> get props => [this.value];
+  List<Object> get props => [this.key, this.value];
 }

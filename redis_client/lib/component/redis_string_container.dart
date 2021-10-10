@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redis_client/bloc/redis_client_bloc.dart';
+import 'package:redis_client/bloc/redis_client_event.dart';
 
-class RedisStringContainer extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode focusNode;
+class RedisStringContainer extends StatefulWidget {
+  final String redisKey;
+  final String redisValue;
 
   const RedisStringContainer(
-      {Key? key, required this.controller, required this.focusNode})
+      {Key? key, required this.redisKey, required this.redisValue})
       : super(key: key);
+
+  @override
+  _RedisStringContainerState createState() => _RedisStringContainerState();
+}
+
+class _RedisStringContainerState extends State<RedisStringContainer> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = widget.redisValue;
+    focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.unfocus();
+    controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +59,8 @@ class RedisStringContainer extends StatelessWidget {
             color: Theme.of(context).buttonColor,
             textColor: Theme.of(context).colorScheme.primary,
             onPressed: () {
-              debugPrint("submit");
+              BlocProvider.of<RedisClientBloc>(context)
+                  .add(UpdateRedisString(widget.redisKey, controller.text));
             },
           )
         ],

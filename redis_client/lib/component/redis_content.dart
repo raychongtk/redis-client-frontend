@@ -17,13 +17,9 @@ class _RedisContentState extends State<RedisContent> {
     return BlocBuilder<RedisClientBloc, RedisClientState>(
         builder: (context, state) {
       if (state is RedisStringFetched) {
-        TextEditingController controller =
-            TextEditingController(text: state.value);
-        FocusNode focusNode = FocusNode();
-        focusNode.requestFocus();
         return RedisStringContainer(
-          controller: controller,
-          focusNode: focusNode,
+          redisKey: state.key,
+          redisValue: state.value,
         );
       }
 

@@ -37,7 +37,12 @@ class RedisClientBloc extends Bloc<RedisClientEvent, RedisClientState> {
     if (event is GetRedisString) {
       GetStringValueResponse response =
           await redisStringApiRepository.get(event.key);
-      yield RedisStringFetched(response.value);
+      yield RedisStringFetched(event.key, response.value);
+    }
+
+    if (event is UpdateRedisString) {
+      redisStringApiRepository.set(event.key, event.value);
+      yield RedisStringFetched(event.key, event.value);
     }
   }
 }

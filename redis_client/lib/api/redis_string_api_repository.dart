@@ -22,4 +22,8 @@ class RedisStringApiRepository {
 
     return redisString;
   }
+
+  void set(String key, String value) {
+    redisStringApiProvider.set(key, value);
+  }
 }
