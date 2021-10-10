@@ -12,15 +12,32 @@ class RedisStringContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8),
-      child: TextField(
-        controller: controller,
-        focusNode: focusNode,
-        cursorColor: Colors.black,
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-        ),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 9,
+            child: TextField(
+              controller: controller,
+              focusNode: focusNode,
+              cursorColor: Colors.black,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          MaterialButton(
+            padding: EdgeInsets.all(20),
+            minWidth: MediaQuery.of(context).size.width,
+            child: Text("Update"),
+            color: Theme.of(context).buttonColor,
+            textColor: Theme.of(context).colorScheme.primary,
+            onPressed: () {
+              debugPrint("submit");
+            },
+          )
+        ],
       ),
     );
   }

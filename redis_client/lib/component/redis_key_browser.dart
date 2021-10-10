@@ -14,6 +14,13 @@ class RedisKeyBrowser extends StatefulWidget {
 
 class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
   List<String> keys = [];
+  int selectedIndex = -1;
+
+  void updateSelectedItem(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +44,7 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
         child: Container(
+          padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
             borderRadius: BorderRadius.circular(8.0),
@@ -49,23 +57,66 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
               ),
             ],
           ),
-          child: ListView.builder(
-            itemCount: keys.length,
-            itemBuilder: (context, index) {
-              return Material(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: InkWell(
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+          child: Column(
+            children: [
+              Container(
+                child: TextField(
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  ),
+                  cursorColor: Colors.black,
+                ),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 5,
+                      offset: const Offset(0, 1),
                     ),
-                    child: ListTile(
-                      title: Text(keys[index]),
-                    ),
-                    onTap: () => BlocProvider.of<RedisClientBloc>(context)
-                        .add(GetRedisKeyType(keys[index])),
-                  ));
-            },
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: keys.length,
+                  itemBuilder: (context, index) {
+                    return Material(
+                      color: index == selectedIndex
+                          ? Theme.of(context).colorScheme.primaryVariant
+                          : Theme.of(context).colorScheme.primary,
+                      child: Ink(
+                        child: ListTile(
+                          title: Text(keys[index]),
+                          hoverColor:
+                              Theme.of(context).colorScheme.primaryVariant,
+                          onTap: () {
+                            BlocProvider.of<RedisClientBloc>(context)
+                                .add(GetRedisKeyType(keys[index]));
+                            updateSelectedItem(index);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              MaterialButton(
+                padding: EdgeInsets.all(20),
+                minWidth: MediaQuery.of(context).size.width,
+                child: Text("Create"),
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).colorScheme.primary,
+                onPressed: () {
+                  debugPrint("create");
+                },
+              ),
+            ],
           ),
         ),
       ),

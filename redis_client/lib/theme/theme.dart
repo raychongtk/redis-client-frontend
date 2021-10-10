@@ -3,6 +3,7 @@ import 'package:redis_client/theme/color.dart';
 
 ThemeData buildRedisClientTheme(ThemeData baseTheme) {
   return baseTheme.copyWith(
+    buttonColor: buttonColor,
     colorScheme: baseTheme.colorScheme.copyWith(
       primary: primary,
       primaryVariant: primaryVariant,
