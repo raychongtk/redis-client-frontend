@@ -24,8 +24,8 @@ class RedisApiRepository {
     return redisConnection;
   }
 
-  Future<GetRedisKeysResponse> getRedisKeys() async {
-    ApiResponse apiResponse = await redisApiProvider.getKeys();
+  Future<GetRedisKeysResponse> getRedisKeys(String pattern) async {
+    ApiResponse apiResponse = await redisApiProvider.getKeys(pattern);
 
     if (apiResponse.error != null) {
       return apiResponse.error;
@@ -38,5 +38,21 @@ class RedisApiRepository {
     }
 
     return redisKeys;
+  }
+
+  Future<GetKeyTypeResponse> getRedisKeyType(String key) async {
+    ApiResponse apiResponse = await redisApiProvider.getType(key);
+
+    if (apiResponse.error != null) {
+      return apiResponse.error;
+    }
+
+    final redisKeyType = cast(apiResponse.successResult);
+
+    if (redisKeyType == null) {
+      throw new Exception("something went wrong");
+    }
+
+    return redisKeyType;
   }
 }

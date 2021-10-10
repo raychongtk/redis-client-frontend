@@ -18,8 +18,26 @@ class ConnectRedis extends RedisClientEvent {
 class FetchRedisKeys extends RedisClientEvent {
   final String pattern;
 
-  FetchRedisKeys({this.pattern = ""});
+  FetchRedisKeys({this.pattern = "*"});
 
   @override
   List<Object> get props => [this.pattern];
+}
+
+class GetRedisKeyType extends RedisClientEvent {
+  final String key;
+
+  GetRedisKeyType(this.key);
+
+  @override
+  List<Object> get props => [this.key];
+}
+
+class GetRedisString extends RedisClientEvent {
+  final String key;
+
+  GetRedisString(this.key);
+
+  @override
+  List<Object> get props => [this.key];
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redis_client/bloc/redis_client_bloc.dart';
 import 'package:redis_client/bloc/redis_client_event.dart';
 import 'package:redis_client/bloc/redis_client_state.dart';
+import 'package:redis_client/common/redis_key_type.dart';
 
 class RedisKeyBrowser extends StatefulWidget {
   const RedisKeyBrowser({Key? key}) : super(key: key);
@@ -25,6 +26,12 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
           setState(() {
             keys = state.keys;
           });
+        }
+        if (state is RedisKeyTypeFetched) {
+          if (state.dataType == RedisDataType.STRING) {
+            BlocProvider.of<RedisClientBloc>(context)
+                .add(GetRedisString(state.key));
+          }
         }
       },
       child: Padding(
@@ -55,7 +62,8 @@ class _RedisKeyBrowserState extends State<RedisKeyBrowser> {
                     child: ListTile(
                       title: Text(keys[index]),
                     ),
-                    onTap: () => debugPrint("${keys[index]}"),
+                    onTap: () => BlocProvider.of<RedisClientBloc>(context)
+                        .add(GetRedisKeyType(keys[index])),
                   ));
             },
           ),

@@ -27,10 +27,17 @@ class RedisApiProvider {
                 ConnectRedisResponse.fromJson(json.decode(resp.body))));
   }
 
-  Future<ApiResponse> getKeys() {
-    final String url = "$baseAPI/ajax/redis?pattern=*";
+  Future<ApiResponse> getKeys(String pattern) {
+    final String url = "$baseAPI/ajax/redis?pattern=$pattern";
 
     return httpClient.get(url).then((resp) => ApiResponse(
         successResult: GetRedisKeysResponse.fromJson(json.decode(resp.body))));
+  }
+
+  Future<ApiResponse> getType(String key) {
+    final String url = "$baseAPI/ajax/redis/$key/type";
+
+    return httpClient.get(url).then((resp) => ApiResponse(
+        successResult: GetKeyTypeResponse.fromJson(json.decode(resp.body))));
   }
 }
